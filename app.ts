@@ -1,7 +1,12 @@
-import express, { Express, Request, Response } from "express";
+// import express, { Express, Request, Response } from "express";
 import * as dotenv from "dotenv";
+import * as WebSocket from "ws";
 
 import bodyParser from "body-parser";
+import * as http from "http";
+
+const express = require("express");
+const messageHandler = require("./messageHandler"); // Import the module
 
 dotenv.config({
   path: `.env.${
@@ -11,7 +16,7 @@ dotenv.config({
   override: true,
 });
 
-const app: Express = express();
+const app = express();
 
 const cors = require("cors");
 
@@ -29,8 +34,27 @@ app.use(bodyParser.json());
 // Connect routes to app
 app.use("/ping", pingRoute);
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", (req: any, res: any) => {
   res.send("Hello, this is Express + TypeScript");
 });
 
-module.exports = app;
+const SocketServer = http.createServer(app);
+
+const wss = new WebSocket.Server({ server: SocketServer });
+
+wss.on("connection", function connection(ws: any) {
+  console.log("----------------------------------------");
+  console.log(`Client connected`);
+  console.log("----------------------------------------");
+  messageHandler.setClientSocket(ws);
+
+  ws.on("message", function message(data: any) {
+    console.log(`${data}`);
+  });
+
+  ws.on("close", function close() {
+    console.log("Client disconnected");
+  });
+});
+
+module.exports = SocketServer;

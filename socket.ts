@@ -1,8 +1,10 @@
 import * as https from "https";
 import * as WebSocket from "ws";
 import * as dotenv from "dotenv";
+import * as http from "http";
 
 var express = require("express");
+const app = require("./app");
 
 const admin_app = express();
 
@@ -16,15 +18,9 @@ dotenv.config({
   override: true,
 });
 
-// const SocketServer = http.createServer(
-//   {
-//     cert: process.env.SOCKET_CERT,
-//     key: process.env.SOCKET_KEY,
-//   },
-//   admin_app
-// );
+const SocketServer = http.createServer(admin_app);
 
-const wss = new WebSocket.Server({ server: admin_app });
+const wss = new WebSocket.Server({ server: SocketServer });
 
 wss.on("connection", function connection(ws: any) {
   console.log("----------------------------------------");
@@ -41,4 +37,4 @@ wss.on("connection", function connection(ws: any) {
   });
 });
 
-module.exports = admin_app;
+module.exports = SocketServer;
