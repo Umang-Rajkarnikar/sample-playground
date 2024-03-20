@@ -2,6 +2,10 @@ import * as https from "https";
 import * as WebSocket from "ws";
 import * as dotenv from "dotenv";
 
+var express = require("express");
+
+const admin_app = express();
+
 const messageHandler = require("./messageHandler"); // Import the module
 
 dotenv.config({
@@ -12,10 +16,13 @@ dotenv.config({
   override: true,
 });
 
-const SocketServer = https.createServer({
-  cert: process.env.SOCKET_CERT,
-  key: process.env.SOCKET_KEY,
-});
+const SocketServer = https.createServer(
+  {
+    cert: process.env.SOCKET_CERT,
+    key: process.env.SOCKET_KEY,
+  },
+  admin_app
+);
 
 const wss = new WebSocket.Server({ server: SocketServer });
 
