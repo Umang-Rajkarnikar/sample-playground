@@ -16,15 +16,15 @@ dotenv.config({
   override: true,
 });
 
-const SocketServer = https.createServer(
-  {
-    cert: process.env.SOCKET_CERT,
-    key: process.env.SOCKET_KEY,
-  },
-  admin_app
-);
+// const SocketServer = http.createServer(
+//   {
+//     cert: process.env.SOCKET_CERT,
+//     key: process.env.SOCKET_KEY,
+//   },
+//   admin_app
+// );
 
-const wss = new WebSocket.Server({ server: SocketServer });
+const wss = new WebSocket.Server({ server: admin_app });
 
 wss.on("connection", function connection(ws: any) {
   console.log("----------------------------------------");
@@ -41,4 +41,4 @@ wss.on("connection", function connection(ws: any) {
   });
 });
 
-module.exports = SocketServer;
+module.exports = admin_app;
