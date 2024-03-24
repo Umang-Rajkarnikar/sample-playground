@@ -4,6 +4,7 @@ import * as WebSocket from "ws";
 
 import bodyParser from "body-parser";
 import * as http from "http";
+import * as https from "https";
 
 const express = require("express");
 const messageHandler = require("./messageHandler"); // Import the module
@@ -38,23 +39,31 @@ app.get("/", (req: any, res: any) => {
   res.send("Hello, this is Express + TypeScript");
 });
 
-const SocketServer = http.createServer(app);
+// const SocketServer = https.createServer(
+//   {
+//     cert: process.env.SOCKET_CERT,
+//     key: process.env.SOCKET_KEY,
+//   },
+//   app
+// );
 
-const wss = new WebSocket.Server({ server: SocketServer });
+// const SocketServer = http.createServer(app);
 
-wss.on("connection", function connection(ws: any) {
-  console.log("----------------------------------------");
-  console.log(`Client connected`);
-  console.log("----------------------------------------");
-  messageHandler.setClientSocket(ws);
+// const wss = new WebSocket.Server({ server: SocketServer });
 
-  ws.on("message", function message(data: any) {
-    console.log(`${data}`);
-  });
+// wss.on("connection", function connection(ws: any) {
+//   console.log("----------------------------------------");
+//   console.log(`Client connected`);
+//   console.log("----------------------------------------");
+//   messageHandler.setClientSocket(ws);
 
-  ws.on("close", function close() {
-    console.log("Client disconnected");
-  });
-});
+//   ws.on("message", function message(data: any) {
+//     console.log(`${data}`);
+//   });
 
-module.exports = SocketServer;
+//   ws.on("close", function close() {
+//     console.log("Client disconnected");
+//   });
+// });
+
+module.exports = app;

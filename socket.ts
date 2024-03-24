@@ -5,6 +5,7 @@ import * as http from "http";
 
 var express = require("express");
 const app = require("./app");
+const fs = require("fs");
 
 const admin_app = express();
 
@@ -18,7 +19,10 @@ dotenv.config({
   override: true,
 });
 
-const SocketServer = http.createServer(admin_app);
+const SocketServer = https.createServer({
+  cert: fs.readFileSync("cert.pem"),
+  key: fs.readFileSync("test_key.pem"),
+});
 
 const wss = new WebSocket.Server({ server: SocketServer });
 
