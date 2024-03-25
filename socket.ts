@@ -20,8 +20,8 @@ dotenv.config({
 });
 
 const SocketServer = https.createServer({
-  cert: fs.readFileSync("cert.pem"),
-  key: fs.readFileSync("test_key.pem"),
+  cert: fs.readFileSync(process.env.CERT_PATH),
+  key: fs.readFileSync(process.env.KEY_PATH),
 });
 
 const wss = new WebSocket.Server({ server: SocketServer });
